@@ -1,4 +1,6 @@
 #from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -16,24 +18,34 @@ class EntryListView(ListView):
 class EntryDetailView(DetailView):
     model = Entry
 
-class EntryCreateView(CreateView):
+class EntryCreateView(SuccessMessageMixin,CreateView):
     model = Entry
     fields = ["title","content"]
     success_url = reverse_lazy("entry-list")
+    success_message = "Your entry was created successfully!"
 
-class EntryUpdateView(UpdateView):
+class EntryUpdateView(SuccessMessageMixin,UpdateView):
     model = Entry
     fields = ["title","content"]
-
+    success_message = "Your entry was updated successfully!"
     def get_success_url(self):
         return reverse_lazy(
             "entry-detail",
-            kwargs={"pk":self.entry.id}
+            kwargs={"pk":self.object.pk}
         )
 
 class EntryDeleteView(DeleteView):
     model = Entry
     success_url = reverse_lazy("entry-list")
+    success_message = "Your entry was deleted successfully!"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(
+            self.request,
+            self.success_message
+        )
+        return super().delete(request, *args, **kwargs)
+
 
 
 # Create your views here.

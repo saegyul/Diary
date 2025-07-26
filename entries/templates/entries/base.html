@@ -8,7 +8,14 @@
     </head>
 
     <body>
-        <h1><a href="/">My Dear Diary ...</a></h1>
+        <h1><a href="/">My Dear Secret ...</a></h1>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class= "message"> {{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% block content %}{% endblock content %}
     </body>
 </html>
