@@ -1,0 +1,16 @@
+[Unit]
+Description=uWSGI Emperor
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /home/ubuntu/Diary/uwsgi.ini
+RuntimeDirectory=uwsgi
+Restart=always
+KillSignal=SIGQUIT
+#Type=notify
+Type=Forking
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+
